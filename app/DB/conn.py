@@ -17,6 +17,13 @@ class SQLAlchemy:
         pool_recycle = kwargs.setdefault('DB_POOL_RECYCLE', 900)
         echo = kwargs.setdefault('DB_ECHO', True)
 
+        self._engine = create_engine(
+            database_url,
+            echo=echo,
+            pool_recycle=pool_recycle,
+            pool_pre_ping=True,
+        )
+
         self._session = sessionmaker(autocommit=False, autoflush=False, bind=self._engine)
 
         @app.on_event('startup')
